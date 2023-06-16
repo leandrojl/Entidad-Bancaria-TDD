@@ -2,32 +2,36 @@ package ar.edu.unlam.pb2.entidadBancaria;
 
 public class Tarjeta extends Cuenta{
 	
-	private String nombre;
+
 	private Long numeroDeTarjeta; 
 	private String titularDeLaTarjeta;
-	private String fechaDeOtorgamiento;
+	private String fechaVencimiento;
 	private Integer codigoDeSeguridad;
+	private Double saldo;
 	
-	public Tarjeta(String nombre, Long numeroDeTarjeta, String titularDeLaTarjeta, String fechaDeOtorgamiento,
-			Integer codigoDeSeguridad) {
+	public Tarjeta(Long numeroDeTarjeta, String titularDeLaTarjeta, String fechaVencimiento,
+			Integer codigoDeSeguridad, Double saldo) {
 		super();
-		this.nombre = nombre;
 		this.numeroDeTarjeta = numeroDeTarjeta;
 		this.titularDeLaTarjeta = titularDeLaTarjeta;
-		this.fechaDeOtorgamiento = fechaDeOtorgamiento;
+		this.fechaVencimiento = fechaVencimiento;
 		this.codigoDeSeguridad = codigoDeSeguridad;
+		this.saldo = saldo;
 	}
 	
+	public Tarjeta(Long numeroDeTarjeta, String titularDeLaTarjeta, String fechaVencimiento,
+			Integer codigoDeSeguridad) {
+		super();
+		this.numeroDeTarjeta = numeroDeTarjeta;
+		this.titularDeLaTarjeta = titularDeLaTarjeta;
+		this.fechaVencimiento = fechaVencimiento;
+		this.codigoDeSeguridad = codigoDeSeguridad;
+	}
+
 	public Tarjeta() {
 		
 	}
 	
-	public String getNombre() {
-		return nombre;
-	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
 	public Long getNumeroDeTarjeta() {
 		return numeroDeTarjeta;
 	}
@@ -40,17 +44,25 @@ public class Tarjeta extends Cuenta{
 	public void setTitularDeLaTarjeta(String titularDeLaTarjeta) {
 		this.titularDeLaTarjeta = titularDeLaTarjeta;
 	}
-	public String getFechaDeOtorgamiento() {
-		return fechaDeOtorgamiento;
+	public String getFechaVencimiento() {
+		return fechaVencimiento;
 	}
-	public void setFechaDeOtorgamiento(String fechaDeOtorgamiento) {
-		this.fechaDeOtorgamiento = fechaDeOtorgamiento;
+	public void setFechaVencimiento(String fechaDeOtorgamiento) {
+		this.fechaVencimiento = fechaDeOtorgamiento;
 	}
 	public Integer getCodigoDeSeguridad() {
 		return codigoDeSeguridad;
 	}
 	public void setCodigoDeSeguridad(Integer codigoDeSeguridad) {
 		this.codigoDeSeguridad = codigoDeSeguridad;
+	}
+
+	public Double getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(Double saldo) {
+		this.saldo = saldo;
 	}
 	
 	
