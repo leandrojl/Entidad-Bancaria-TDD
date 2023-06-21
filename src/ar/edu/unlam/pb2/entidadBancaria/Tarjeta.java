@@ -1,6 +1,6 @@
 package ar.edu.unlam.pb2.entidadBancaria;
 
-public class Tarjeta extends Cuenta{
+public class Tarjeta {
 	
 
 	private Long numeroDeTarjeta; 
@@ -11,7 +11,6 @@ public class Tarjeta extends Cuenta{
 	
 	public Tarjeta(Long numeroDeTarjeta, String titularDeLaTarjeta, String fechaVencimiento,
 			Integer codigoDeSeguridad, Double saldo) {
-		super();
 		this.numeroDeTarjeta = numeroDeTarjeta;
 		this.titularDeLaTarjeta = titularDeLaTarjeta;
 		this.fechaVencimiento = fechaVencimiento;
@@ -21,7 +20,6 @@ public class Tarjeta extends Cuenta{
 	
 	public Tarjeta(Long numeroDeTarjeta, String titularDeLaTarjeta, String fechaVencimiento,
 			Integer codigoDeSeguridad) {
-		super();
 		this.numeroDeTarjeta = numeroDeTarjeta;
 		this.titularDeLaTarjeta = titularDeLaTarjeta;
 		this.fechaVencimiento = fechaVencimiento;

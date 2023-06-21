@@ -5,9 +5,9 @@ public class TarjetaDeCredito extends Tarjeta{
 	private Double limiteDeCompraEnPesos;
 	private Double limiteDeCompraEnDolares;
 	
-	public TarjetaDeCredito(Long numeroDeTarjeta, String titularDeLaTarjeta, String fechaDeOtorgamiento,
+	public TarjetaDeCredito(Long numeroDeTarjeta, String titularDeLaTarjeta, String fechaDeVencimiento,
 			Integer codigoDeSeguridad, Double limiteDeCompraEnPesos, Double limiteDeCompraEnDolares) {
-		super(numeroDeTarjeta, titularDeLaTarjeta, fechaDeOtorgamiento, codigoDeSeguridad);
+		super(numeroDeTarjeta, titularDeLaTarjeta, fechaDeVencimiento, codigoDeSeguridad);
 		this.setLimiteDeCompraEnPesos(limiteDeCompraEnPesos);
 		this.setLimiteDeCompraEnDolares(limiteDeCompraEnDolares);
 	}
