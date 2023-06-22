@@ -18,8 +18,10 @@ import ar.edu.unlam.pb2.entidadBancaria.TarjetaDeDebito;
 import ar.edu.unlam.pb2.excepciones.CBUInvalidoException;
 import ar.edu.unlam.pb2.excepciones.CVUInvalidoException;
 import ar.edu.unlam.pb2.excepciones.CuitInvalidoException;
+import ar.edu.unlam.pb2.excepciones.NoCoincideTitularException;
 import ar.edu.unlam.pb2.excepciones.NumeroDeTarjetaInvalidoException;
 import ar.edu.unlam.pb2.excepciones.SaldoInsuficienteException;
+import ar.edu.unlam.pb2.interfaces.MedioDePago;
 
 public class TestCases {
 
@@ -160,21 +162,21 @@ public class TestCases {
 		assertEquals(2, mataGalan.getComercios().size());
 	}
 	
-	@Test
-	public void queSePuedanAgregar3ClientesALaBilletera() {
-		// Preparaci�n 
-		
-		
-		// Ejecuci�n
-		BilleteraVirtual mataGalan = new BilleteraVirtual("Bna+");
-		
-		mataGalan.agregarCliente(new Cliente(27541231, "Luis Gomez"));
-		mataGalan.agregarCliente(new Cliente(27541231, "Luis Gomez"));
-		mataGalan.agregarCliente(new Cliente(36541231, "Sofia Molina"));
-		
-		// Verificaci�n
-		assertEquals(3, mataGalan.getClientes().size());
-	}
+//	@Test
+//	public void queSePuedanAgregar3ClientesALaBilletera() {
+//		// Preparaci�n 
+//		
+//		
+//		// Ejecuci�n
+//		BilleteraVirtual mataGalan = new BilleteraVirtual("Bna+");
+//		
+//		mataGalan.agregarCliente(new Cliente(27541231, "Luis Gomez"));
+//		mataGalan.agregarCliente(new Cliente(27541231, "Luis Gomez"));
+//		mataGalan.agregarCliente(new Cliente(36541231, "Sofia Molina"));
+//		
+//		// Verificaci�n
+//		assertEquals(3, mataGalan.getClientes().size());
+//	}
 	
 	@Test
 	public void queSePuedanAgregarDistintosMediosDePagoALaBilleteraDeUnCliente() throws NumeroDeTarjetaInvalidoException, CBUInvalidoException, CVUInvalidoException, NoCoincideTitularException{
@@ -186,22 +188,24 @@ public class TestCases {
 		
 		BilleteraVirtual mataGalan = new BilleteraVirtual(1,"MercadoPago");
 		
-		mataGalan.agregarCliente(cliente);
+		MedioDePago tarjetaDeDebito = new TarjetaDeDebito(48332562153254623L, "Luis Gomez", "10/10/2026", 265);
+		
+		mataGalan.setCliente(cliente);
 		
 		cliente.agregarBilletera(mataGalan);
 		
-		mataGalan.agregarMedioDePago(27541231, new TarjetaDeDebito(48332562153254623L, "Luis Gomez", "10/10/2026", 265));
+		mataGalan.agregarMedioDePago(tarjetaDeDebito);
 		
-		mataGalan.agregarMedioDePago(27541231, new TarjetaDeDebito(48332562153254623L, "Luis Gomez", "10/10/2026", 312));
+		mataGalan.agregarMedioDePago(new TarjetaDeDebito(48332562153254623L, "Luis Gomez", "10/10/2026", 312));
 		
-		mataGalan.agregarMedioDePago(27541231, new TarjetaDeCredito(5423542385612354L, "Luis Gomez", "10/10/2026", 153));
+		mataGalan.agregarMedioDePago(new TarjetaDeCredito(5423542385612354L, "Luis Gomez", "10/10/2026", 153));
 		
-		mataGalan.agregarMedioDePago(27541231, new CuentaBancaria(1,"01702046600000087865", "Naci�n", "Luis Gomez"));
+		mataGalan.agregarMedioDePago(new CuentaBancaria(1,"01702046600000087865", "Naci�n", "Luis Gomez"));
 		
-		mataGalan.agregarMedioDePago(27541231, new CuentaVirtual(2,"0000003100036521571806", "Mercado Pago", "Luis Gomez"));
+		mataGalan.agregarMedioDePago(new CuentaVirtual(2,"0000003100036521571806", "Mercado Pago", "Luis Gomez"));
 		
 		// Verificaci�n
-		assertEquals(CANTIDAD_DE_MEDIOS_EN_LA_BILLETERA_ESPERADOS, billetera.getCantidadDeMediosDePago(27541231));
+		assertEquals(CANTIDAD_DE_MEDIOS_EN_LA_BILLETERA_ESPERADOS, ((Integer)mataGalan.getMediosDePago().size()));
 	}
 	
 //	@Test

@@ -1,6 +1,7 @@
 package ar.edu.unlam.pb2.entidadBancaria;
+import ar.edu.unlam.pb2.interfaces.MedioDePago;
 
-public class CuentaVirtual extends Cuenta{
+public class CuentaVirtual extends Cuenta implements MedioDePago{
 	
 	private String cvu;
 
@@ -20,6 +21,36 @@ public class CuentaVirtual extends Cuenta{
 
 	public void setCvu(String cvu) {
 		this.cvu = cvu;
+	}
+
+	@Override
+	public void realizarPago() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void verificarDisponibilidad() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void obtenerTransaccionesRecientes() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cancelarPago() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void generarToken() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,6 +1,8 @@
 package ar.edu.unlam.pb2.entidadBancaria;
 
-public class CuentaBancaria extends Cuenta{
+import ar.edu.unlam.pb2.interfaces.MedioDePago;
+
+public class CuentaBancaria extends Cuenta implements MedioDePago{
 	
 	private String cbu;
 
@@ -20,6 +22,36 @@ public class CuentaBancaria extends Cuenta{
 
 	public void setCbu(String cbu) {
 		this.cbu = cbu;
+	}
+
+	@Override
+	public void realizarPago() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void verificarDisponibilidad() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void obtenerTransaccionesRecientes() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cancelarPago() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void generarToken() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

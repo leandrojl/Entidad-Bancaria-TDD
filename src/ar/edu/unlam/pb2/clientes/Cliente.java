@@ -11,6 +11,7 @@ public class Cliente extends Persona{
 
 	public Cliente(Integer dni, String nombre) {
 		super(dni, nombre);
+		this.billeterasVirtuales = new HashSet<BilleteraVirtual>();
 	}
 	
 	public Cliente(Integer numeroCliente, Integer dni, String nombre) {

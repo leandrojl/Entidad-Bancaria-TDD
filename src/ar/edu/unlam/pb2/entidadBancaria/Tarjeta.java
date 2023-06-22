@@ -1,8 +1,10 @@
 package ar.edu.unlam.pb2.entidadBancaria;
+import java.util.Objects;
 
-public class Tarjeta {
+import ar.edu.unlam.pb2.interfaces.MedioDePago;
+
+public class Tarjeta implements MedioDePago{
 	
-
 	private Long numeroDeTarjeta; 
 	private String titularDeLaTarjeta;
 	private String fechaVencimiento;
@@ -62,7 +64,52 @@ public class Tarjeta {
 	public void setSaldo(Double saldo) {
 		this.saldo = saldo;
 	}
-	
-	
+
+	@Override
+	public void realizarPago() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void verificarDisponibilidad() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void obtenerTransaccionesRecientes() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cancelarPago() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void generarToken() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(numeroDeTarjeta);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tarjeta other = (Tarjeta) obj;
+		return Objects.equals(numeroDeTarjeta, other.numeroDeTarjeta);
+	}	
 
 }

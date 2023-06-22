@@ -7,21 +7,20 @@ import java.util.Objects;
 import ar.edu.unlam.pb2.clientes.Cliente;
 import ar.edu.unlam.pb2.clientes.Comercio;
 import ar.edu.unlam.pb2.excepciones.ClienteNoEncontradoException;
-
+import ar.edu.unlam.pb2.interfaces.MedioDePago;
 
 public class BilleteraVirtual {
 	
 	private String nombre;
 	private Integer codigoIdentificacion;
+	private Cliente cliente;
 	private HashSet<Comercio> comercios;
-	private HashMap<Cliente, HashSet<MedioDePago>> clientes;
-	private HashSet<Cuenta> mediosDePago;
+	private HashSet<MedioDePago> mediosDePago;
 
 	public BilleteraVirtual(String nombre) {
 		this.setComercios(new HashSet<Comercio>());
 		this.nombre = nombre;
-		this.clientes = new HashSet<Cliente>();
-		this.mediosDePago = new HashSet<Cuenta>();
+		this.mediosDePago = new HashSet<MedioDePago>();
 	}
 	
 	public BilleteraVirtual(Integer codigoIdentificacion, String nombre) {
@@ -29,8 +28,7 @@ public class BilleteraVirtual {
 		this.codigoIdentificacion = codigoIdentificacion;
 		this.setComercios(new HashSet<Comercio>());
 		this.nombre = nombre;
-		this.clientes = new HashSet<Cliente>();
-		this.mediosDePago = new HashSet<Cuenta>();
+		this.mediosDePago = new HashSet<MedioDePago>();
 	}
 
 	public String getNombre() {
@@ -54,24 +52,11 @@ public class BilleteraVirtual {
 		this.comercios = comercios;
 	}
 
-	public void agregarCliente(Cliente cliente) {
-		this.clientes.add(cliente);
-		
-	}
-
-	public HashSet<Cliente> getClientes() {
-		return clientes;
-	}
-
-	public void setClientes(HashSet<Cliente> clientes) {
-		this.clientes = clientes;
-	}
-
-	public HashSet<Cuenta> getMediosDePago() {
+	public HashSet<MedioDePago> getMediosDePago() {
 		return mediosDePago;
 	}
 
-	public void setMediosDePago(HashSet<Cuenta> mediosDePago) {
+	public void setMediosDePago(HashSet<MedioDePago> mediosDePago) {
 		this.mediosDePago = mediosDePago;
 	}
 
@@ -100,23 +85,36 @@ public class BilleteraVirtual {
 		return Objects.equals(codigoIdentificacion, other.codigoIdentificacion);
 	}
 
-	public void agregarMedioDePago(Integer dni, Cuenta medioDePago) throws ClienteNoEncontradoException {
+//	public void agregarMedioDePago(Integer dni, Cuenta medioDePago) throws ClienteNoEncontradoException {
+//
+//		Cliente cliente = buscarClientePorDNI(dni);
+//		
+//		
+//		
+//	}
 
-		Cliente cliente = buscarClientePorDNI(dni);
-		
-		
-		
+//	private Cliente buscarClientePorDNI(Integer dni) throws ClienteNoEncontradoException {
+//		
+//		for(Cliente cliente : clientes) {
+//			if(cliente.getDni().equals(dni)) {
+//				return cliente;
+//			}
+//		}
+//		
+//		throw new ClienteNoEncontradoException("Cliente no encontrado");
+//	}
+
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	private Cliente buscarClientePorDNI(Integer dni) throws ClienteNoEncontradoException {
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public void agregarMedioDePago(MedioDePago unMedioDePago) {
+		this.mediosDePago.add(unMedioDePago);
 		
-		for(Cliente cliente : clientes) {
-			if(cliente.getDni().equals(dni)) {
-				return cliente;
-			}
-		}
-		
-		throw new ClienteNoEncontradoException("Cliente no encontrado");
 	}
 
 }
