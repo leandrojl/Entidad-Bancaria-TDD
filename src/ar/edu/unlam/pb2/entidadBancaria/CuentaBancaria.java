@@ -1,5 +1,6 @@
 package ar.edu.unlam.pb2.entidadBancaria;
 
+import ar.edu.unlam.pb2.eventos.Compra;
 import ar.edu.unlam.pb2.interfaces.MedioDePago;
 
 public class CuentaBancaria extends Cuenta implements MedioDePago{
@@ -50,6 +51,18 @@ public class CuentaBancaria extends Cuenta implements MedioDePago{
 
 	@Override
 	public void generarToken() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void realizarPago(Compra compra) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void realizarPago(Double monto) {
 		// TODO Auto-generated method stub
 		
 	}

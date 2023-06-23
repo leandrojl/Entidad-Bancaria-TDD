@@ -1,12 +1,16 @@
 package ar.edu.unlam.pb2.entidadBancaria;
 
-import ar.edu.unlam.pb2.interfaces.PaqueteBlack;
 import ar.edu.unlam.pb2.interfaces.MedioDePago;
+
+import java.util.HashMap;
+
+import ar.edu.unlam.pb2.eventos.Compra;
 
 public class TarjetaDeCredito extends Tarjeta implements MedioDePago{
 	
 	private Double limiteDeCompraEnPesos;
 	private Double limiteDeCompraEnDolares;
+	private HashMap<Integer, Compra> registroDeCompras;
 	
 	public TarjetaDeCredito(Long numeroDeTarjeta, String titularDeLaTarjeta, String fechaDeVencimiento,
 			Integer codigoDeSeguridad, Double limiteDeCompraEnPesos, Double limiteDeCompraEnDolares) {
@@ -63,6 +67,14 @@ public class TarjetaDeCredito extends Tarjeta implements MedioDePago{
 	public void generarToken() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public HashMap<Integer, Compra> getRegistroDeCompras() {
+		return registroDeCompras;
+	}
+
+	public void setRegistroDeCompras(HashMap<Integer, Compra> registroDeCompras) {
+		this.registroDeCompras = registroDeCompras;
 	}
 	
 

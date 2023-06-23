@@ -15,9 +15,11 @@ import ar.edu.unlam.pb2.entidadBancaria.Pagadora;
 import ar.edu.unlam.pb2.entidadBancaria.Tarjeta;
 import ar.edu.unlam.pb2.entidadBancaria.TarjetaDeCredito;
 import ar.edu.unlam.pb2.entidadBancaria.TarjetaDeDebito;
+import ar.edu.unlam.pb2.eventos.Compra;
 import ar.edu.unlam.pb2.excepciones.CBUInvalidoException;
 import ar.edu.unlam.pb2.excepciones.CVUInvalidoException;
 import ar.edu.unlam.pb2.excepciones.CuitInvalidoException;
+import ar.edu.unlam.pb2.excepciones.ExcedeLimiteDeCompraException;
 import ar.edu.unlam.pb2.excepciones.NoCoincideTitularException;
 import ar.edu.unlam.pb2.excepciones.NumeroDeTarjetaInvalidoException;
 import ar.edu.unlam.pb2.excepciones.SaldoInsuficienteException;
@@ -182,7 +184,7 @@ public class TestCases {
 	public void queSePuedanAgregarDistintosMediosDePagoALaBilleteraDeUnCliente() throws NumeroDeTarjetaInvalidoException, CBUInvalidoException, CVUInvalidoException, NoCoincideTitularException{
 		// Preparaci�n tarjeta de credito
 		final Long NUMERO_TARJETA = 4246789813121201L;
-		final String TITULAR_ESPERADO = "SOFIA BARRIENTOS";
+		final String TITULAR_ESPERADO = "Luis Gomez";
 		final Integer CODIGO_DE_SEGURIDAD_ESPERADO = 567;
 		final String FECHA_DE_VENCIMIENTO_ESPERADO = "25/05/2025";
 		final Double LIMITE_COMPRA_EN_PESOS = 100000.0;
@@ -232,21 +234,23 @@ public class TestCases {
 		assertEquals(CANTIDAD_DE_MEDIOS_EN_LA_BILLETERA_ESPERADOS, ((Integer)mataGalan.getMediosDePago().size()));
 	}
 	
-//	@Test
-//	public void queSePuedaPagarConUnaTarjetaDeCredito() throws NumeroDeTarjetaInvalidoException, CBUInvalidoException, CVUInvalidoException, ExcedeLimiteDeCompraException{
-//		// Preparaci�n 
-//		Billetera mataGalan = new Billetera("Ank");
-//		mataGalan.agregarConsumidor(Consumidor(27541231, "Luis Gomez");
-//		mataGalan.agregarMedioDePago(27541231, new TarjetaDeCredito(48332562153254623L, "Luis Gomez", "10/10/2026", 265, 100000.0, 1000.0));
-//		mataGalan.agregarComercio(new Comercio(30456213545L, "Panader�a"));	
-//		// Ejecuci�n	
-//		Compra codigoQR = mataGalan.generarCodigoQR(30456213545L, 1000.0);
-//		Boolean resultado = mataGalan.pagar(codigoQR, mataGalan.getConsumidor(27541231).getMedioPagador(48332562153254623L));
-//		
-//		// Verificaci�n
-//		assertTrue(resultado);
-//	}
-//	
+	@Test
+	public void queSePuedaPagarConUnaTarjetaDeCredito() throws NumeroDeTarjetaInvalidoException, CBUInvalidoException, CVUInvalidoException, ExcedeLimiteDeCompraException, NoCoincideTitularException{
+		// Preparaci�n
+		MedioDePago tarjetaDeCredito = new TarjetaDeCredito(48332562153254623L, "Luis Gomez", "10/10/2026", 265, 100000.0, 1000.0);
+		Comercio nuevoComercio = new Comercio(30456213545L, "Panaderia Don Jose");
+		BilleteraVirtual mataGalan = new BilleteraVirtual("Ank");
+		mataGalan.setCliente(new Cliente(27541231, "Luis Gomez"));
+		mataGalan.agregarMedioDePago(tarjetaDeCredito);
+		mataGalan.agregarComercio(nuevoComercio);	
+		// Ejecuci�n	
+		mataGalan.realizarPago(new Compra(1,tarjetaDeCredito, nuevoComercio, 1000.0));
+		//Boolean resultado = mataGalan.pagar(codigoQR, mataGalan.getConsumidor(27541231).getMedioPagador(48332562153254623L));
+		
+		// Verificaci�n
+		//assertTrue(resultado);
+	}
+	
 //	@Test
 //	public void queSePuedaTransferirDeUnaCuentaAOtra() throws NumeroDeTarjetaInvalidoException, CBUInvalidoException, CVUInvalidoException, SaldoInsuficienteException{
 //		// Preparaci�n 

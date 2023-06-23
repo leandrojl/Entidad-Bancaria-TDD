@@ -1,6 +1,7 @@
 package ar.edu.unlam.pb2.entidadBancaria;
 import java.util.Objects;
 
+import ar.edu.unlam.pb2.eventos.Compra;
 import ar.edu.unlam.pb2.interfaces.MedioDePago;
 
 public class Tarjeta implements MedioDePago{
@@ -110,6 +111,18 @@ public class Tarjeta implements MedioDePago{
 			return false;
 		Tarjeta other = (Tarjeta) obj;
 		return Objects.equals(numeroDeTarjeta, other.numeroDeTarjeta);
+	}
+
+	@Override
+	public void realizarPago(Compra compra) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void realizarPago(Double monto) {
+		// TODO Auto-generated method stub
+		
 	}	
 
 }

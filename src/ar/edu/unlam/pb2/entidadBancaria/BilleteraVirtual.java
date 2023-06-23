@@ -1,21 +1,30 @@
 package ar.edu.unlam.pb2.entidadBancaria;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 
 import ar.edu.unlam.pb2.clientes.Cliente;
 import ar.edu.unlam.pb2.clientes.Comercio;
+import ar.edu.unlam.pb2.eventos.Compra;
+import ar.edu.unlam.pb2.excepciones.CVUInvalidoException;
 import ar.edu.unlam.pb2.excepciones.ClienteNoEncontradoException;
+import ar.edu.unlam.pb2.excepciones.ComercioInvalidadException;
+import ar.edu.unlam.pb2.excepciones.MedioDePagoNoDisponibleException;
+import ar.edu.unlam.pb2.excepciones.MedioDePagoNoVerificadoException;
+import ar.edu.unlam.pb2.excepciones.NoCoincideTitularException;
+import ar.edu.unlam.pb2.excepciones.TarjetaNoDisponibleException;
 import ar.edu.unlam.pb2.interfaces.MedioDePago;
 
-public class BilleteraVirtual {
+public class BilleteraVirtual implements MedioDePago{
 	
 	private String nombre;
 	private Integer codigoIdentificacion;
 	private Cliente cliente;
 	private HashSet<Comercio> comercios;
 	private HashSet<MedioDePago> mediosDePago;
+	private ArrayList <Compra> compras;
 
 	public BilleteraVirtual(String nombre) {
 		this.setComercios(new HashSet<Comercio>());
@@ -112,8 +121,157 @@ public class BilleteraVirtual {
 		this.cliente = cliente;
 	}
 
-	public void agregarMedioDePago(MedioDePago unMedioDePago) {
+	public void agregarMedioDePago(MedioDePago unMedioDePago) throws NoCoincideTitularException {
+		validarTitularidad(unMedioDePago);
 		this.mediosDePago.add(unMedioDePago);
+		
+	}
+
+	private Boolean validarTitularidad(MedioDePago unMedioDePago) throws NoCoincideTitularException {
+		
+		if (unMedioDePago instanceof TarjetaDeCredito) {
+	        TarjetaDeCredito tarjeta = (TarjetaDeCredito) unMedioDePago;
+	        if(this.cliente.getNombre().equals(tarjeta.getTitularDeLaTarjeta())) {
+	        	return true;
+	        }
+	    } else if (unMedioDePago instanceof TarjetaDeDebito) {
+	        TarjetaDeDebito tarjeta = (TarjetaDeDebito) unMedioDePago;
+	        if(this.cliente.getNombre().equals(tarjeta.getTitularDeLaTarjeta())) {
+	        	return true;
+	        }
+	    } else if (unMedioDePago instanceof CuentaBancaria) {
+	        CuentaBancaria cuenta = (CuentaBancaria) unMedioDePago;
+	        
+	        if(this.cliente.getNombre().equals(cuenta.getTitular())) {
+	        	return true;
+	        }
+	    } else if (unMedioDePago instanceof CuentaVirtual) {
+	        CuentaVirtual cuenta = (CuentaVirtual) unMedioDePago;
+	        if(this.cliente.getNombre().equals(cuenta.getTitular())) {
+	        	return true;
+	        }
+	    }
+	    	 
+	    	throw new NoCoincideTitularException("el titular no ");
+	    
+		
+		
+	}
+
+	@Override
+	public void realizarPago(Compra compra) {
+		//1) Recibo la compra
+		//2) Valido que la billetera tenga el comercio
+		//3) Valido que la billetera tenga el medio de pago
+		//4) Verifico que medio de pago es
+		//5) Realizo el pago 
+		//6) Registro la compra en la billetara
+		//7) Registro la compra en el comerio
+		
+		
+		try {
+			validarComercio(compra.getComercio());
+			validarMedioDePago(compra.getMedioDePago());
+			MedioDePago medioDePago = obtenerQueMedioDePagoEs(compra.getMedioDePago());
+			realizoElPago(compra, medioDePago);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	private void realizoElPago(Compra compra, Object medioDePago) {
+		if (medioDePago instanceof TarjetaDeCredito) {
+		    TarjetaDeCredito tarjeta = (TarjetaDeCredito) medioDePago;
+		    tarjeta.realizarPago(compra.getMonto());
+		} else if (medioDePago instanceof TarjetaDeDebito) {
+		    TarjetaDeDebito tarjeta = (TarjetaDeDebito) medioDePago;
+		    // Realiza operaciones con la tarjeta
+		} else if (medioDePago instanceof CuentaVirtual) {
+		    CuentaVirtual cuenta = (CuentaVirtual) medioDePago;
+		    // Realiza operaciones con la cuenta virtual
+		} else if (medioDePago instanceof CuentaBancaria) {
+		    CuentaBancaria cuenta = (CuentaBancaria) medioDePago;
+		    // Realiza operaciones con la cuenta bancaria
+		}
+		
+	}
+
+	private MedioDePago obtenerQueMedioDePagoEs(MedioDePago medioDePago) throws MedioDePagoNoVerificadoException {
+    if (medioDePago instanceof TarjetaDeCredito) {
+        TarjetaDeCredito tarjeta = (TarjetaDeCredito) medioDePago;
+        return tarjeta;
+    } else if (medioDePago instanceof TarjetaDeDebito) {
+        TarjetaDeDebito tarjeta = (TarjetaDeDebito) medioDePago;
+        return tarjeta;
+    } else if (medioDePago instanceof CuentaVirtual) {
+        CuentaVirtual cuenta = (CuentaVirtual) medioDePago;
+        return cuenta;
+    } else if (medioDePago instanceof CuentaBancaria) {
+        CuentaBancaria cuenta = (CuentaBancaria) medioDePago;
+        return cuenta;
+    } 
+    throw new MedioDePagoNoVerificadoException("Medio de pago no verificado");
+}
+
+	private Boolean validarMedioDePago(MedioDePago medioDePago) throws MedioDePagoNoDisponibleException {
+
+		if(this.mediosDePago.contains(medioDePago)) {
+			return true;
+		}
+		throw new MedioDePagoNoDisponibleException("Medio de pago no encontrado");
+	}
+
+	private Boolean validarComercio(Comercio comercio) throws ComercioInvalidadException {
+		if(this.comercios.contains(comercio)) {
+			return true;
+		}
+		throw new ComercioInvalidadException("Comercio no adherido");
+	}
+
+	@Override
+	public void verificarDisponibilidad() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void obtenerTransaccionesRecientes() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cancelarPago() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void generarToken() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void realizarPago() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ArrayList <Compra> getCompras() {
+		return compras;
+	}
+
+	public void setCompras(ArrayList <Compra> compras) {
+		this.compras = compras;
+	}
+
+	@Override
+	public void realizarPago(Double monto) {
+		// TODO Auto-generated method stub
 		
 	}
 
