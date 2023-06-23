@@ -180,29 +180,53 @@ public class TestCases {
 	
 	@Test
 	public void queSePuedanAgregarDistintosMediosDePagoALaBilleteraDeUnCliente() throws NumeroDeTarjetaInvalidoException, CBUInvalidoException, CVUInvalidoException, NoCoincideTitularException{
-		// Preparaci�n 
-		final Integer CANTIDAD_DE_MEDIOS_EN_LA_BILLETERA_ESPERADOS = 4;
+		// Preparaci�n tarjeta de credito
+		final Long NUMERO_TARJETA = 4246789813121201L;
+		final String TITULAR_ESPERADO = "SOFIA BARRIENTOS";
+		final Integer CODIGO_DE_SEGURIDAD_ESPERADO = 567;
+		final String FECHA_DE_VENCIMIENTO_ESPERADO = "25/05/2025";
+		final Double LIMITE_COMPRA_EN_PESOS = 100000.0;
+		final Double LIMITE_COMPRA_EN_DOLARES = 1000.0;
+		final Integer CANTIDAD_DE_MEDIOS_EN_LA_BILLETERA_ESPERADOS = 5;
+		
+		//Preparacion cuenta bancaria
+		final Integer NUMERO_DE_CUENTA = 1;
+		final String NUMERO_CBU = "01702046600000087865";
+		final String ENTIDAD_BANCARIA = "Naci�n";
+		final String TITULAR_CUENTA_BANCARIA = "Luis Gomez";
+		
+		//Preparacion cuenta virtual
+		final Integer NUMERO_DE_CUENTA2 = 2;
+		final String NUMERO_CVU = "0000003100036521571806";
+		final String ENTIDAD_BANCARIA2 = "Naci�n";
+		final String TITULAR_CUENTA_VIRTUAL = "Luis Gomez";
 		
 		// Ejecuci�n
 		Cliente cliente = new Cliente(27541231, "Luis Gomez");
 		
 		BilleteraVirtual mataGalan = new BilleteraVirtual(1,"MercadoPago");
 		
-		MedioDePago tarjetaDeDebito = new TarjetaDeDebito(48332562153254623L, "Luis Gomez", "10/10/2026", 265);
+		
+		
+		TarjetaDeCredito tarjetaDeCredito = cuandoCreoUnaTarjetaDeCredito(NUMERO_TARJETA,TITULAR_ESPERADO, FECHA_DE_VENCIMIENTO_ESPERADO,CODIGO_DE_SEGURIDAD_ESPERADO,LIMITE_COMPRA_EN_PESOS,LIMITE_COMPRA_EN_DOLARES);
+		
+		CuentaBancaria cuentaBancaria = cuandoCreoUnaCuentaBancaria(NUMERO_DE_CUENTA,NUMERO_CBU, ENTIDAD_BANCARIA, TITULAR_CUENTA_BANCARIA);
+		
+		CuentaVirtual cuentaVirtual = cuandoCreoUnaCuentaVirtual(NUMERO_DE_CUENTA2,NUMERO_CVU, ENTIDAD_BANCARIA2, TITULAR_CUENTA_VIRTUAL);
 		
 		mataGalan.setCliente(cliente);
 		
 		cliente.agregarBilletera(mataGalan);
 		
-		mataGalan.agregarMedioDePago(tarjetaDeDebito);
+		mataGalan.agregarMedioDePago(tarjetaDeCredito);
 		
 		mataGalan.agregarMedioDePago(new TarjetaDeDebito(48332562153254623L, "Luis Gomez", "10/10/2026", 312));
 		
 		mataGalan.agregarMedioDePago(new TarjetaDeCredito(5423542385612354L, "Luis Gomez", "10/10/2026", 153));
 		
-		mataGalan.agregarMedioDePago(new CuentaBancaria(1,"01702046600000087865", "Naci�n", "Luis Gomez"));
+		mataGalan.agregarMedioDePago(cuentaBancaria);
 		
-		mataGalan.agregarMedioDePago(new CuentaVirtual(2,"0000003100036521571806", "Mercado Pago", "Luis Gomez"));
+		mataGalan.agregarMedioDePago(cuentaVirtual);
 		
 		// Verificaci�n
 		assertEquals(CANTIDAD_DE_MEDIOS_EN_LA_BILLETERA_ESPERADOS, ((Integer)mataGalan.getMediosDePago().size()));
@@ -259,6 +283,71 @@ public class TestCases {
 //
 //	}
 	
+	private CuentaVirtual cuandoCreoUnaCuentaVirtual(Integer nUMERO_DE_CUENTA2, String nUMERO_CVU,
+			String eNTIDAD_BANCARIA2, String tITULAR_CUENTA_VIRTUAL) throws CVUInvalidoException {
+		validarCvu(nUMERO_CVU);
+		return new CuentaVirtual(nUMERO_DE_CUENTA2,nUMERO_CVU, eNTIDAD_BANCARIA2, tITULAR_CUENTA_VIRTUAL);
+	}
+
+
+	private Boolean validarCvu(String nUMERO_CVU) throws CVUInvalidoException {
+		if (nUMERO_CVU.matches("\\b\\d{22}\\b")) {
+			
+		    return true;
+		
+		} else {
+			
+		    throw new CVUInvalidoException("numero incorrecto de cvu");
+		}
+		
+	}
+
+
+	private CuentaBancaria cuandoCreoUnaCuentaBancaria(Integer nUMERO_DE_CUENTA, String nUMERO_CBU,
+			String eNTIDAD_BANCARIA, String tITULAR_CUENTA_BANCARIA) throws CBUInvalidoException {
+		validarCbu(nUMERO_CBU);
+		return new CuentaBancaria(nUMERO_DE_CUENTA,nUMERO_CBU, eNTIDAD_BANCARIA, tITULAR_CUENTA_BANCARIA);
+	}
+
+
+	private Boolean validarCbu(String nUMERO_CBU) throws CBUInvalidoException {
+			if (nUMERO_CBU.matches("\\b\\d{20}\\b")) {
+			
+		    return true;
+		
+		} else {
+			
+		    throw new CBUInvalidoException("numero incorrecto de cbu");
+		}
+		
+	}
+
+
+	private TarjetaDeCredito cuandoCreoUnaTarjetaDeCredito(Long nUMERO_TARJETA, String tITULAR_ESPERADO,
+			String fECHA_DE_VENCIMIENTO_ESPERADO, Integer cODIGO_DE_SEGURIDAD_ESPERADO, Double lIMITE_COMPRA_EN_PESOS,
+			Double lIMITE_COMPRA_EN_DOLARES) throws NumeroDeTarjetaInvalidoException {
+		
+		validarNumeroTarjeta(nUMERO_TARJETA);
+		return new TarjetaDeCredito(nUMERO_TARJETA, tITULAR_ESPERADO,
+			fECHA_DE_VENCIMIENTO_ESPERADO, cODIGO_DE_SEGURIDAD_ESPERADO, lIMITE_COMPRA_EN_PESOS, lIMITE_COMPRA_EN_DOLARES);
+		
+	}
+
+
+	private Boolean validarNumeroTarjeta(Long nUMERO_TARJETA) throws NumeroDeTarjetaInvalidoException {
+		String numeroString = Long.toString(nUMERO_TARJETA);
+		if (numeroString.matches("\\d{16}")) {
+			
+		    return true;
+		
+		} else {
+			
+		    throw new NumeroDeTarjetaInvalidoException("numero incorrecto de tarjeta");
+		}
+		
+	}
+
+
 	private Tarjeta cuandoCreoUnaTarjetaDeDebito(Long NUMERO_ESPERADO, String TITULAR_ESPERADO,
 			String FECHA_DE_VENCIMIENTO_ESPERADO, Integer CODIGO_DE_SEGURIDAD_ESPERADO) throws NumeroDeTarjetaInvalidoException {
 
@@ -275,5 +364,8 @@ public class TestCases {
 		}
 		
 	}
+	
+	
+	}
 
-}
+
