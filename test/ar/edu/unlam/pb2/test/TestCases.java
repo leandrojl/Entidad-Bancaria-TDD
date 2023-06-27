@@ -2,6 +2,7 @@ package ar.edu.unlam.pb2.test;
 
 import static org.junit.Assert.*;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import ar.edu.unlam.pb2.clientes.Cliente;
@@ -146,7 +147,7 @@ public class TestCases {
 		
 		// Verificaci�n
 		assertEquals(NOMBRE_ESPERADO, nuevo.getNombre());
-		assertEquals(NOMBRE_ESPERADO, nuevo.getDni());
+		assertEquals(DNI_ESPERADO, nuevo.getDni());
 	}
 	
 	@Test
@@ -237,18 +238,22 @@ public class TestCases {
 	@Test
 	public void queSePuedaPagarConUnaTarjetaDeCredito() throws NumeroDeTarjetaInvalidoException, CBUInvalidoException, CVUInvalidoException, ExcedeLimiteDeCompraException, NoCoincideTitularException{
 		// Preparaci�n
+		final Integer NUMERO_DE_COMPRA = 1;
+		final Double MONTO_COMPRA = 1000.0;
+		
 		MedioDePago tarjetaDeCredito = new TarjetaDeCredito(48332562153254623L, "Luis Gomez", "10/10/2026", 265, 100000.0, 1000.0);
 		Comercio nuevoComercio = new Comercio(30456213545L, "Panaderia Don Jose");
 		BilleteraVirtual mataGalan = new BilleteraVirtual("Ank");
+		Compra nuevaCompra = new Compra(NUMERO_DE_COMPRA,tarjetaDeCredito, nuevoComercio, MONTO_COMPRA);
 		mataGalan.setCliente(new Cliente(27541231, "Luis Gomez"));
 		mataGalan.agregarMedioDePago(tarjetaDeCredito);
 		mataGalan.agregarComercio(nuevoComercio);	
 		// Ejecuci�n	
-		mataGalan.realizarPago(new Compra(1,tarjetaDeCredito, nuevoComercio, 1000.0));
+		mataGalan.realizarPago(nuevaCompra);
 		//Boolean resultado = mataGalan.pagar(codigoQR, mataGalan.getConsumidor(27541231).getMedioPagador(48332562153254623L));
 		
 		// Verificaci�n
-		//assertTrue(resultado);
+		Assert.assertTrue( ((TarjetaDeCredito)tarjetaDeCredito).getSaldo() == 1000.0  );
 	}
 	
 //	@Test

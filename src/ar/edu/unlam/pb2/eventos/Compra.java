@@ -11,6 +11,7 @@ public class Compra {
 	
 	public Compra(Integer numeroCompra, MedioDePago medioDePago, Comercio comercio, Double monto) {
 		super();
+		this.numeroCompra = numeroCompra;
 		this.medioDePago = medioDePago;
 		this.comercio = comercio;
 		this.monto = monto;

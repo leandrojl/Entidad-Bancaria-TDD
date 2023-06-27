@@ -10,7 +10,7 @@ public class Tarjeta implements MedioDePago{
 	private String titularDeLaTarjeta;
 	private String fechaVencimiento;
 	private Integer codigoDeSeguridad;
-	private Double saldo;
+	private Double saldo = 0.0;
 	
 	public Tarjeta(Long numeroDeTarjeta, String titularDeLaTarjeta, String fechaVencimiento,
 			Integer codigoDeSeguridad, Double saldo) {

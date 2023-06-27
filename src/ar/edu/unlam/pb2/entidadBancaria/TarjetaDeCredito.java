@@ -5,6 +5,7 @@ import ar.edu.unlam.pb2.interfaces.MedioDePago;
 import java.util.HashMap;
 
 import ar.edu.unlam.pb2.eventos.Compra;
+import ar.edu.unlam.pb2.excepciones.SaldoInsuficienteException;
 
 public class TarjetaDeCredito extends Tarjeta implements MedioDePago{
 	
@@ -17,10 +18,14 @@ public class TarjetaDeCredito extends Tarjeta implements MedioDePago{
 		super(numeroDeTarjeta, titularDeLaTarjeta, fechaDeVencimiento, codigoDeSeguridad);
 		this.setLimiteDeCompraEnPesos(limiteDeCompraEnPesos);
 		this.setLimiteDeCompraEnDolares(limiteDeCompraEnDolares);
+		this.registroDeCompras = new HashMap<Integer, Compra>();
 	}
 
 	public TarjetaDeCredito(Long numeroDeTarjeta, String titularDeLaTarjeta, String fechaDeVencimiento, Integer codigoDeSeguridad) {
 		super(numeroDeTarjeta, titularDeLaTarjeta, fechaDeVencimiento, codigoDeSeguridad);
+		this.setLimiteDeCompraEnPesos(limiteDeCompraEnPesos);
+		this.setLimiteDeCompraEnDolares(limiteDeCompraEnDolares);
+		this.registroDeCompras = new HashMap<Integer, Compra>();
 	}
 
 	public Double getLimiteDeCompraEnPesos() {
@@ -42,6 +47,32 @@ public class TarjetaDeCredito extends Tarjeta implements MedioDePago{
 	@Override
 	public void realizarPago() {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void realizarPago(Double monto) {
+		
+	}
+	
+	@Override
+	public void realizarPago(Compra compra){
+		try {
+			verificarLimiteDeCompra(compra.getMonto());
+		} catch (SaldoInsuficienteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.registroDeCompras.put(compra.getNumeroCompra(), compra);
+		setSaldo(this.getSaldo() + compra.getMonto());
+	}
+
+	private Boolean verificarLimiteDeCompra(Double monto) throws SaldoInsuficienteException {
+		if(this.limiteDeCompraEnPesos >= monto) {
+			return true;
+		}
+		
+		throw new SaldoInsuficienteException("Saldo insuficiente para la operacion");
 		
 	}
 

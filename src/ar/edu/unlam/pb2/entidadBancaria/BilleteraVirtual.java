@@ -14,6 +14,7 @@ import ar.edu.unlam.pb2.excepciones.ComercioInvalidadException;
 import ar.edu.unlam.pb2.excepciones.MedioDePagoNoDisponibleException;
 import ar.edu.unlam.pb2.excepciones.MedioDePagoNoVerificadoException;
 import ar.edu.unlam.pb2.excepciones.NoCoincideTitularException;
+import ar.edu.unlam.pb2.excepciones.SaldoInsuficienteException;
 import ar.edu.unlam.pb2.excepciones.TarjetaNoDisponibleException;
 import ar.edu.unlam.pb2.interfaces.MedioDePago;
 
@@ -170,8 +171,8 @@ public class BilleteraVirtual implements MedioDePago{
 		
 		
 		try {
-			validarComercio(compra.getComercio());
-			validarMedioDePago(compra.getMedioDePago());
+			validarComercioEnBilletera(compra.getComercio());
+			validarMedioDePagoEnBilletera(compra.getMedioDePago());
 			MedioDePago medioDePago = obtenerQueMedioDePagoEs(compra.getMedioDePago());
 			realizoElPago(compra, medioDePago);
 		} catch (Exception e) {
@@ -182,10 +183,10 @@ public class BilleteraVirtual implements MedioDePago{
 		
 	}
 
-	private void realizoElPago(Compra compra, Object medioDePago) {
+	private void realizoElPago(Compra compra, Object medioDePago) throws SaldoInsuficienteException {
 		if (medioDePago instanceof TarjetaDeCredito) {
 		    TarjetaDeCredito tarjeta = (TarjetaDeCredito) medioDePago;
-		    tarjeta.realizarPago(compra.getMonto());
+		    tarjeta.realizarPago(compra);
 		} else if (medioDePago instanceof TarjetaDeDebito) {
 		    TarjetaDeDebito tarjeta = (TarjetaDeDebito) medioDePago;
 		    // Realiza operaciones con la tarjeta
@@ -216,7 +217,7 @@ public class BilleteraVirtual implements MedioDePago{
     throw new MedioDePagoNoVerificadoException("Medio de pago no verificado");
 }
 
-	private Boolean validarMedioDePago(MedioDePago medioDePago) throws MedioDePagoNoDisponibleException {
+	private Boolean validarMedioDePagoEnBilletera(MedioDePago medioDePago) throws MedioDePagoNoDisponibleException {
 
 		if(this.mediosDePago.contains(medioDePago)) {
 			return true;
@@ -224,7 +225,7 @@ public class BilleteraVirtual implements MedioDePago{
 		throw new MedioDePagoNoDisponibleException("Medio de pago no encontrado");
 	}
 
-	private Boolean validarComercio(Comercio comercio) throws ComercioInvalidadException {
+	private Boolean validarComercioEnBilletera(Comercio comercio) throws ComercioInvalidadException {
 		if(this.comercios.contains(comercio)) {
 			return true;
 		}
